@@ -14,7 +14,7 @@ public class Athlete {
     private String username;
     private String firstName;
     private String lastName;
-    private boolean status;
+    private boolean enabled;
 
 
     public int getId() {
@@ -46,4 +46,8 @@ public class Athlete {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public boolean getEnabled() { return enabled; }
+
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
 }
