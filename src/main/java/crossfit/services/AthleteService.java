@@ -1,7 +1,7 @@
 package crossfit.services;
 
 import java.util.List;
-import crossfit.model.Person;
+import crossfit.model.Athlete;
 
 /**
  * The Player controller.
@@ -11,17 +11,17 @@ import crossfit.model.Person;
  * @since 8/5/2016
  *
  */
-public class PersonService {
+public class AthleteService {
 
-    public List<Person> getAllPersons() {
+    public List<Athlete> getAllPersons() {
         return null;
     }
 
-    public Person createPerson(Person person) {
+    public Athlete createPerson(Athlete athlete) {
         return null;
     }
 
-    public boolean updatePerson(int id, Person person) {
+    public boolean updatePerson(int id, Athlete athlete) {
         return false;
     }
 

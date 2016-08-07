@@ -1,19 +1,21 @@
 package crossfit.model;
 
 /**
- * The Player controller.
+ * Athlete POJO
  *
  * @author Craig Walker
  * @version 1.0
  * @since 8/5/2016
  *
  */
-public class Person {
+public class Athlete {
 
     private int id;
+    private String username;
     private String firstName;
     private String lastName;
-    private String username;
+    private boolean status;
+
 
     public int getId() {
         return id;
@@ -22,6 +24,12 @@ public class Person {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) { this.username = username; }
 
     public String getFirstName() {
         return firstName;
@@ -37,13 +45,5 @@ public class Person {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 }
