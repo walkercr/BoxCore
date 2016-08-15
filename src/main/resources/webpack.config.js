@@ -3,7 +3,7 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const PATH = {
-    BUILD_DIR: path.resolve(__dirname, 'resources/dist'),
+    BUILD_DIR: path.resolve(__dirname, 'dist'),
     SRC_DIR: path.resolve(__dirname, 'src'),
     ENTRY: path.resolve(__dirname, 'src/index.jsx')
 };

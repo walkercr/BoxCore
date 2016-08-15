@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <properties>
-        <springframework.version>4.0.3.RELEASE</springframework.version>
+        <springframework.version>4.3.2.RELEASE</springframework.version>
         <springsecurity.version>3.2.3.RELEASE</springsecurity.version>
         <log4j2.version>2.5</log4j2.version>
         <thymeleaf.version>2.1.3.RELEASE</thymeleaf.version>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>template</groupId>
-    <artifactId>template-spring</artifactId>
+    <groupId>com.boxinterface</groupId>
+    <artifactId>box-interface</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <build>

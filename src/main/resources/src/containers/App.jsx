@@ -65,7 +65,6 @@ export default class App extends React.Component {
     handleLogout() {
         cookie.remove(App.username, {path: '/'});
         cookie.remove(App.password, {path: '/'});
-        //Object.keys(cookie.select(/^session.*/i)).forEach(name => cookie.remove(name, {path: '/'}));
         this.goToLogin();
     }
 
