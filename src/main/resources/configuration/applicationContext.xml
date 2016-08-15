@@ -14,7 +14,6 @@
         <mvc:resources mapping="/dist/**" location="classpath:/dist/"/>
         <mvc:default-servlet-handler/>
 		<context:component-scan base-package="crossfit"/>
-        <tx:annotation-driven/>
 		
 		<bean name="tomcatEmbeddedServletContainerFactory"  class="org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory"/>
 		<bean name="dispatcherServlet"  class="org.springframework.web.servlet.DispatcherServlet"/>
@@ -26,7 +25,7 @@
 		<!-- **************************************************************** -->
 
 		<bean id="templateResolver" class="crossfit.framework.views.CustomTemplateResolver">
-			<property name="prefix" value="dist/" />
+			<property name="prefix" value="views/" />
 			<property name="suffix" value=".html" />
 			<property name="templateMode" value="LEGACYHTML5" />
 		</bean>
@@ -46,25 +45,6 @@
 			<property name="username" value="root"/>
 			<property name="password" value="Caiden_14"/>
 		</bean>
-
-		<bean id="mySessionFactory"
-			  class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-			<property name="dataSource" ref="myDataSource"/>
-            <property name="mappingResources">
-                <list>
-                    <value></value>
-                </list>
-            </property>
-			<property name="hibernateProperties">
-				<value>hibernate.dialect=org.hibernate.dialect.MySQL5Dialect</value>
-			</property>
-		</bean>
-
-		<bean id="transactionManager"
-			  class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-			<property name="sessionFactory" ref="mySessionFactory"/>
-		</bean>
-
 
 		<bean id="playerService" class="crossfit.services.AthleteService" />
 </beans>
