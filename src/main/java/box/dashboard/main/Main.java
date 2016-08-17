@@ -1,4 +1,4 @@
-package crossfit.main;
+package box.dashboard.main;
 
 public class Main {
 	

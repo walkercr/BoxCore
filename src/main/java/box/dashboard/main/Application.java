@@ -1,4 +1,4 @@
-package crossfit.main;
+package box.dashboard.main;
 
 import org.springframework.core.io.ClassPathResource;
 

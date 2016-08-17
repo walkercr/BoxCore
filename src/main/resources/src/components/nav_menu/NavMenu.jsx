@@ -30,7 +30,7 @@ export default class NavMenu extends React.Component {
                 <Navbar fluid inverse className='nav-menu'>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a href='#'><em>BoxInterface</em></a>
+                            <a href='#'><em>BoxDashboard</em></a>
                         </Navbar.Brand>
                     </Navbar.Header>
                 </Navbar>
@@ -41,7 +41,7 @@ export default class NavMenu extends React.Component {
                         onToggle={this.handleToggle.bind(this)}>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a href='#'><em>BoxInterface</em></a>
+                            <a href='#'><em>BoxDashboard</em></a>
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>

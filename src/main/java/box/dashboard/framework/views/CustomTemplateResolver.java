@@ -1,4 +1,4 @@
-package crossfit.framework.views;
+package box.dashboard.framework.views;
 
 import java.io.InputStream;
 
