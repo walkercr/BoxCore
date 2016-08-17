@@ -28,12 +28,27 @@ export default class App extends React.Component {
     componentDidMount() {
         let username = cookie.load(App.username);
         let password = cookie.load(App.password);
+        this.fetchUsers();
         if (username && password) {
             // this.fetchUser(username);
             this.goToHomePage();
         } else {
             this.goToLogin();
         }
+    }
+
+    fetchUsers() {
+        let request = new XMLHttpRequest();
+        request.open('GET', '/api/user/', true);
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.onload = () => {
+            if (request.status === 200) {
+                console.log(JSON.parse(request.responseText));
+            } else {
+                console.log(request.status);
+            }
+        };
+        request.send();
     }
 
     goToLogin(username = '', password = '') {
