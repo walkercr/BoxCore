@@ -9,8 +9,8 @@
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.boxinterface</groupId>
-    <artifactId>box-interface</artifactId>
+    <groupId>io.boxcore</groupId>
+    <artifactId>boxcore</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <build>

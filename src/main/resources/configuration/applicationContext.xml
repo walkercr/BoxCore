@@ -16,14 +16,14 @@
 		<mvc:annotation-driven/>
         <mvc:resources mapping="/dist/**" location="classpath:/dist/"/>
         <mvc:default-servlet-handler/>
-		<context:component-scan base-package="box"/>
+		<context:component-scan base-package="io.boxcore"/>
 		
 		<bean name="tomcatEmbeddedServletContainerFactory"
 			  class="org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory"/>
 		<bean name="dispatcherServlet"
 			  class="org.springframework.web.servlet.DispatcherServlet"/>
 		
-		<bean id="templateResolver" class="box.dashboard.framework.views.CustomTemplateResolver">
+		<bean id="templateResolver" class="io.boxcore.framework.views.CustomTemplateResolver">
 			<property name="prefix" value="views/" />
 			<property name="suffix" value=".html" />
 			<property name="templateMode" value="LEGACYHTML5" />
@@ -56,7 +56,7 @@
 			</property>
 			<property name="annotatedClasses">
 				<list>
-					<value>box.dashboard.model.User</value>
+					<value>io.boxcore.model.User</value>
 				</list>
 			</property>
 		</bean>
@@ -66,13 +66,13 @@
 			<property name="sessionFactory" ref="sessionFactory"/>
 		</bean>
 
-		<bean id="userDao" class="box.dashboard.dao.UserDaoImpl">
+		<bean id="userDao" class="io.boxcore.dao.UserDaoImpl">
 			<constructor-arg>
 				<ref bean="sessionFactory"/>
 			</constructor-arg>
 		</bean>
 
-		<bean id="userService" class="box.dashboard.services.UserServiceImpl">
+		<bean id="userService" class="io.boxcore.services.UserServiceImpl">
 			<constructor-arg>
 				<ref bean="userDao"/>
 			</constructor-arg>
