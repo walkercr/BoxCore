@@ -3,6 +3,7 @@ package io.boxcore.services;
 import java.util.List;
 
 import io.boxcore.dao.UserDao;
+import io.boxcore.dto.SignUpDto;
 import io.boxcore.model.User;
 
 /**
@@ -25,7 +26,18 @@ public class UserServiceImpl implements UserService {
         return userDao.list();
     }
 
-    public Integer createUser(User user) {
+    public User getUser(int id) {
+        return userDao.getUser(id);
+    }
+
+    public Integer createUser(SignUpDto signUpDto) {
+        if (signUpDto == null) {
+            return null;
+        }
+        User user = new User(signUpDto.getUsername(),
+                             signUpDto.getFirstName(),
+                             signUpDto.getLastName(),
+                             signUpDto.getEmail());
         return userDao.create(user);
     }
 

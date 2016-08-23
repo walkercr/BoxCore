@@ -1,40 +1,33 @@
 export default class WebApiClient {
 
-    static get(uri) {
+    static httpGet(uri, callback) {
         let request = WebApiClient.buildRequest('GET', uri);
         request.onload = () => {
-            if (request.status === 200) {
-                return JSON.parse(request.responseText);
-            } else {
-                return "no content";
-            }
-            //return request.status === 200
-            //        ? JSON.parse(request.responseText)
-            //        : null;
+            callback(request.status, request.responseText);
         };
         request.send();
     }
 
-    static put(uri, body) {
+    static httpPut(uri, body, callback) {
         let request = WebApiClient.buildRequest('PUT', uri);
         request.onload = () => {
-            return request.status === 200;
+            callback(request.status);
         };
         request.send(JSON.stringify(body));
     }
 
-    static post(uri, body) {
+    static httpPost(uri, body, callback) {
         let request = WebApiClient.buildRequest('POST', uri);
         request.onload = () => {
-            return request.status === 200;
+            callback(request.status);
         };
         request.send(JSON.stringify(body));
     }
 
-    static delete(uri) {
+    static httpDelete(uri, callback) {
         let request = WebApiClient.buildRequest('DELETE', uri);
         request.onload = () => {
-            return request.status === 200;
+            callback(request.status);
         };
         request.send();
     }

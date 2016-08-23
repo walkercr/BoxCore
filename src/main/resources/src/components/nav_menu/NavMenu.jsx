@@ -1,10 +1,16 @@
 import React from 'react';
 import './nav-menu.scss';
-import {Navbar, Nav, NavItem} from 'react-bootstrap';
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
+import Divider from 'material-ui/Divider';
+import MenuItem from 'material-ui/MenuItem';
 
 export default class NavMenu extends React.Component {
 
+    static contextTypes = {muiTheme: React.PropTypes.object.isRequired};
+
     static propTypes = {
+        title: React.PropTypes.string.isRequired,
         loggedIn: React.PropTypes.bool.isRequired,
         onHome: React.PropTypes.func.isRequired,
         onPerformance: React.PropTypes.func.isRequired,
@@ -13,59 +19,38 @@ export default class NavMenu extends React.Component {
         onLogout: React.PropTypes.func.isRequired
     };
 
-    state = {show: false};
-
-    handleToggle() {
-        this.setState({show: !this.state.show});
-    }
+    state = {open: false};
 
     handleSelection(callback) {
-        this.setState({show: false});
+        this.setState({open: false});
         callback();
     }
 
     render() {
-        if (!this.props.loggedIn) {
-            return (
-                <Navbar fluid inverse className='nav-menu'>
-                    <Navbar.Header>
-                        <Navbar.Brand>
-                            <a href='#'><em>BoxDashboard</em></a>
-                        </Navbar.Brand>
-                    </Navbar.Header>
-                </Navbar>
-            );
-        } else {
-            return (
-                <Navbar fluid inverse className='nav-menu' expanded={this.state.show}
-                        onToggle={this.handleToggle.bind(this)}>
-                    <Navbar.Header>
-                        <Navbar.Brand>
-                            <a href='#'><em>BoxDashboard</em></a>
-                        </Navbar.Brand>
-                        <Navbar.Toggle />
-                    </Navbar.Header>
-                    <Navbar.Collapse>
-                        <Nav pullRight key={1}>
-                            <NavItem onClick={() => this.handleSelection(this.props.onHome)}>
-                                Home
-                            </NavItem>
-                            <NavItem onClick={() => this.handleSelection(this.props.onPerformance)}>
-                                My Performance
-                            </NavItem>
-                            <NavItem onClick={() => this.handleSelection(this.props.onLeaderboard)}>
-                                Leaderboard
-                            </NavItem>
-                            <NavItem onClick={() => this.handleSelection(this.props.onProfile)}>
-                                Profile
-                            </NavItem>
-                            <NavItem onClick={() => this.handleSelection(this.props.onLogout)}>
-                                Log Out
-                            </NavItem>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-            );
-        }
+        return (
+            <div>
+                <AppBar
+                    title={this.props.title}
+                    iconClassNameRight="muidocs-icon-navigation-expand-more"
+                    onLeftIconButtonTouchTap={() => this.setState({open: !this.state.open})}>
+                </AppBar>
+                <Drawer
+                    docked={false}
+                    width={200}
+                    open={this.state.open}
+                    onRequestChange={(open) => this.setState({open})}>
+                    <AppBar title='Menu' showMenuIconButton={false} style={{backgroundColor: this.context.muiTheme.palette.accent1Color}}/>
+                    <MenuItem onTouchTap={() => this.handleSelection(this.props.onHome)}>Home</MenuItem>
+                    <Divider />
+                    <MenuItem onTouchTap={() => this.handleSelection(this.props.onPerformance)}>Performance</MenuItem>
+                    <Divider />
+                    <MenuItem onTouchTap={() => this.handleSelection(this.props.onLeaderboard)}>Leaderboard</MenuItem>
+                    <Divider />
+                    <MenuItem onTouchTap={() => this.handleSelection(this.props.onProfile)}>Profile</MenuItem>
+                    <Divider />
+                    <MenuItem onTouchTap={() => this.handleSelection(this.props.onLogout)}>Log out</MenuItem>
+                </Drawer>
+            </div>
+        );
     }
 }

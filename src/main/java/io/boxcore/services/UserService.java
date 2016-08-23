@@ -1,5 +1,6 @@
 package io.boxcore.services;
 
+import io.boxcore.dto.SignUpDto;
 import io.boxcore.model.User;
 
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
  */
 public interface UserService {
     List<User> getAllUsers();
-    Integer createUser(User user);
+    User getUser(int id);
+    Integer createUser(SignUpDto signUpDto);
     boolean updateUser(int id, User user);
     boolean deleteUser(int id);
 }

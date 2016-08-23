@@ -17,6 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String username;
 
     @Column(name = "first_name")
@@ -27,8 +28,6 @@ public class User {
 
     private String email;
 
-    private int enabled;
-
     public User() {}
 
     public User(String username, String firstName, String lastName, String email) {
@@ -36,7 +35,6 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.enabled = 1;
     }
 
     public int getId() {
@@ -72,10 +70,6 @@ public class User {
     public String getEmail() { return email; }
 
     public void setEmail(String email) { this.email = email; }
-
-    public int getEnabled() { return enabled; }
-
-    public void setEnabled(int enabled) { this.enabled = enabled; }
 
     @Override
     public String toString() {

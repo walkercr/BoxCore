@@ -2,6 +2,7 @@ package io.boxcore.controllers;
 
 import java.util.List;
 
+import io.boxcore.dto.SignUpDto;
 import io.boxcore.model.User;
 import io.boxcore.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class UserController {
      * Retrieve all users.
      * @return a list of all users
      */
-    @RequestMapping(value = "/api/user/", method = RequestMethod.GET,
+    @RequestMapping(value = "/api/user", method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -41,14 +42,28 @@ public class UserController {
     }
 
     /**
+     * Returns the user with the given id.
+     * @return the user with the given id
+     */
+    @RequestMapping(value = "/api/user/{id}", method = RequestMethod.GET,
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ResponseEntity<User> getUser(@PathVariable("id") int id) {
+        User user = userService.getUser(id);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    /**
      * Create a user.
-     * @param user the user to be created
+     * @param signUpDto the user to be created on sign up
      * @return the id of the created user
      */
-    @RequestMapping(value = "/api/user/", method = RequestMethod.POST,
+    @RequestMapping(value = "/api/user", method = RequestMethod.POST,
                     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> createUser(@RequestBody User user) {
-        Integer id = userService.createUser(user);
+    public ResponseEntity<Integer> createUser(@RequestBody SignUpDto signUpDto) {
+        Integer id = userService.createUser(signUpDto);
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

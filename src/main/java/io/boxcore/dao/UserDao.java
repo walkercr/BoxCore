@@ -14,5 +14,6 @@ import java.util.List;
  */
 public interface UserDao {
     List<User> list();
+    User getUser(int id);
     Integer create(User user);
 }

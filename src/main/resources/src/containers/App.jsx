@@ -1,54 +1,58 @@
 import React from 'react';
 import './app.scss';
 import cookie from 'react-cookie';
+import Ajax from '../ajax/Ajax.jsx';
 import NavMenu from '../components/nav_menu/NavMenu.jsx';
 import Login from '../components/login/Login.jsx';
 import Home from '../components/home/Home.jsx';
 import Performance from '../components/performance/Performance.jsx';
 import Leaderboard from '../components/leaderboard/Leaderboard.jsx';
 import Profile from '../components/profile/Profile.jsx';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 export default class App extends React.Component {
 
-    static username = 'username';
-    static password = 'password';
-    static login = 'login';
-    static home = 'home';
-    static performance = 'performance';
-    static leaderboard = 'leaderboard';
-    static profile = 'profile';
+    static login = 'Login';
+    static home = 'Home';
+    static performance = 'Performance';
+    static leaderboard = 'Leaderboard';
+    static profile = 'Profile';
+
+    static propTypes = {muiTheme: React.PropTypes.object.isRequired};
+    static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
 
     state = {
         loggedIn: false,
         view: null,
         viewName: null,
-        athlete: null
+        user: null,
+        loading: false
     };
 
+    getChildContext() {
+        return {muiTheme: getMuiTheme(this.props.muiTheme)};
+    }
+
     componentDidMount() {
-        let username = cookie.load(App.username);
-        let password = cookie.load(App.password);
-        this.fetchUsers();
-        if (username && password) {
-            // this.fetchUser(username);
-            this.goToHomePage();
+        let id = cookie.load("id");
+        let username = cookie.load("username");
+        let password = cookie.load("password");
+        if (id && username && password) {
+            this.fetchUser(id);
         } else {
             this.goToLogin();
         }
     }
 
-    fetchUsers() {
-        let request = new XMLHttpRequest();
-        request.open('GET', '/api/user/', true);
-        request.setRequestHeader('Content-Type', 'application/json');
-        request.onload = () => {
-            if (request.status === 200) {
-                console.log(JSON.parse(request.responseText));
-            } else {
-                console.log(request.status);
+    fetchUser(id) {
+        Ajax.httpGet('/api/user/' + id, (status, response) => {
+            let user = null;
+            if (status === 200) {
+                user = JSON.parse(response);
             }
-        };
-        request.send();
+            this.setState({user: user, loggedIn: true});
+            this.goToHomePage();
+        });
     }
 
     goToLogin(username = '', password = '') {
@@ -58,7 +62,7 @@ export default class App extends React.Component {
                 <Login
                     username={username}
                     password={password}
-                    onLogin={this.handleLogin.bind(this)}
+                    onLogin={this.fetchUser.bind(this)}
                     onSignUp={this.handleSignUp.bind(this)}
                 />
             ),
@@ -66,20 +70,14 @@ export default class App extends React.Component {
         });
     }
 
-    handleLogin(username, password, save) {
-        let path = save ? '/' : '/session/';
-        cookie.save(App.username, username, {path: path});
-        cookie.save(App.password, password, {path: path});
-        this.goToHomePage();
-    }
-
     handleSignUp(newUser) {
         this.goToLogin(newUser.username, newUser.password);
     }
 
     handleLogout() {
-        cookie.remove(App.username, {path: '/'});
-        cookie.remove(App.password, {path: '/'});
+        cookie.remove("id", {path: '/'});
+        cookie.remove("username", {path: '/'});
+        cookie.remove("password", {path: '/'});
         this.goToLogin();
     }
 
@@ -91,8 +89,7 @@ export default class App extends React.Component {
 
     goToHomePage() {
         this.setState({
-            loggedIn: true,
-            view: <Home athlete={this.state.athlete} />,
+            view: <Home user={this.state.user} />,
             viewName: App.home
         });
     }
@@ -133,14 +130,18 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <NavMenu
-                    loggedIn={this.state.loggedIn}
-                    onHome={this.handleHomePage.bind(this)}
-                    onPerformance={this.handlePerformance.bind(this)}
-                    onLeaderboard={this.handleLeaderboard.bind(this)}
-                    onProfile={this.handleProfile.bind(this)}
-                    onLogout={this.handleLogout.bind(this)}>
-                </NavMenu>
+                {this.state.loggedIn ?
+                    <NavMenu
+                        title={this.state.viewName}
+                        loggedIn={this.state.loggedIn}
+                        onHome={this.handleHomePage.bind(this)}
+                        onPerformance={this.handlePerformance.bind(this)}
+                        onLeaderboard={this.handleLeaderboard.bind(this)}
+                        onProfile={this.handleProfile.bind(this)}
+                        onLogout={this.handleLogout.bind(this)}>
+                    </NavMenu> :
+                    null
+                }
                 {this.state.view}
             </div>
         );

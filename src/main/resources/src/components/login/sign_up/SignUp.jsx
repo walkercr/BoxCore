@@ -1,7 +1,11 @@
 import React from 'react';
 import './sign-up.scss';
 import '../login.scss';
-import {ControlLabel, FormControl, Button} from 'react-bootstrap';
+import Ajax from '../../../ajax/Ajax.jsx';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
+import Divider from 'material-ui/Divider';
 
 export default class SignUp extends React.Component {
 
@@ -16,104 +20,114 @@ export default class SignUp extends React.Component {
         email: '',
         username: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        showConfirmation: false
     };
 
-    handleFirstNameChange(event) {
-        this.setState({firstName: event.target.value});
-    }
-
-    handleLastNameChange(event) {
-        this.setState({lastName: event.target.value});
-    }
-
-    handleEmailChange(event) {
-        this.setState({email: event.target.value});
-    }
-
-    handleUsernameChange(event) {
-        this.setState({username: event.target.value});
-    }
-
-    handlePasswordChange(event) {
-        this.setState({password: event.target.value});
-    }
-
-    handleConfirmPasswordChange(event) {
-        this.setState({confirmPassword: event.target.value});
-    }
-
-    handleSubmit() {
-        this.props.onSignUp(this.state);
-    }
-
-    handleConfirm() {
-        console.log('confirm');
+    handleCreateNewUser() {
+        this.props.onSignUp({
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            email: this.state.email,
+            username: this.state.username,
+            password: this.state.password
+        });
     }
 
     render() {
+        if (this.state.showConfirmation) {
+            let dialogActions = [
+                <RaisedButton
+                    label='Cancel'
+                    secondary
+                    style={{marginRight: '12px'}}
+                    onTouchTap={() => this.setState({showConfirmation: false})}
+                />,
+                <RaisedButton
+                    label='Confirm'
+                    primary
+                    onTouchTap={this.handleCreateNewUser.bind(this)}
+                />
+            ];
+            return (
+                  <Dialog
+                      title='Confirm User Details'
+                      actions={dialogActions}
+                      modal
+                      open={this.state.showConfirmation}>
+                      <Divider/>
+                      {'First Name: ' + this.state.firstName}<br/>
+                      {'Last Name: ' + this.state.lastName}<br/>
+                      {'Email: ' + this.state.email}<br/>
+                      {'Username: ' + this.state.username}
+                  </Dialog>
+
+            );
+        }
         return (
             <div className='container-layout'>
                 <div className='form-container'>
-                <form>
-                    <ControlLabel>First Name:</ControlLabel>
-                    <FormControl
+                    <TextField
+                        fullWidth
+                        hintText='First Name'
+                        floatingLabelText='FirstName'
                         type='text'
-                        bsSize='large'
-                        placeholder='Enter first name'
                         value={this.state.firstName}
-                        onChange={this.handleFirstNameChange.bind(this)}
-                    />
-                    <ControlLabel className='form-element'>Last Name:</ControlLabel>
-                    <FormControl
+                        onChange={e => this.setState({firstName: e.target.value})}
+                    /><br />
+                    <TextField
+                        fullWidth
+                        hintText='Last Name'
+                        floatingLabelText='Last Name'
                         type='text'
-                        bsSize='large'
-                        placeholder='Enter last name'
                         value={this.state.lastName}
-                        onChange={this.handleLastNameChange.bind(this)}
+                        onChange={e => this.setState({lastName: e.target.value})}
                     />
-                    <ControlLabel className='form-element'>Email:</ControlLabel>
-                    <FormControl
-                        type='text'
-                        bsSize='large'
-                        placeholder='Enter email'
+                    <TextField
+                        fullWidth
+                        hintText='Email'
+                        floatingLabelText='Email'
+                        type='email'
                         value={this.state.email}
-                        onChange={this.handleEmailChange.bind(this)}
+                        onChange={e => this.setState({email: e.target.value})}
                     />
-                    <ControlLabel className='form-element'>Username:</ControlLabel>
-                    <FormControl
+                    <TextField
+                        fullWidth
+                        hintText='Username'
+                        floatingLabelText='Username'
                         type='text'
-                        bsSize='large'
-                        placeholder='Enter username'
                         value={this.state.username}
-                        onChange={this.handleUsernameChange.bind(this)}
+                        onChange={e => this.setState({username: e.target.value})}
                     />
-                    <ControlLabel className='form-element'>Password:</ControlLabel>
-                    <FormControl
+                    <TextField
+                        fullWidth
+                        hintText='Password'
+                        floatingLabelText='Password'
                         type='password'
-                        bsSize='large'
-                        placeholder='Enter password'
                         value={this.state.password}
-                        onChange={this.handlePasswordChange.bind(this)}
+                        onChange={e => this.setState({password: e.target.value})}
                     />
-                    <ControlLabel className='form-element'>Confirm Password:</ControlLabel>
-                    <FormControl
+                    <TextField
+                        fullWidth
+                        hintText='Confirm Password'
+                        floatingLabelText='Confirm Password'
                         type='password'
-                        bsSize='large'
-                        placeholder='Confirm password'
                         value={this.state.confirmPassword}
-                        onChange={this.handleConfirmPasswordChange.bind(this)}
+                        onChange={e => this.setState({confirmPassword: e.target.value})}
                     />
-                    <Button
-                        block
-                        type='button'
+                    <RaisedButton
+                        secondary
                         className='form-element'
-                        bsSize='large'
-                        bsStyle='primary'
-                        onClick={this.handleSubmit.bind(this)}>
-                        Submit
-                    </Button>
-                </form>
+                        label={'Cancel'}
+                        style={{marginRight: '20px'}}
+                        onClick={this.props.onCancel}
+                    />
+                    <RaisedButton
+                        primary
+                        className='form-element'
+                        label={'Submit'}
+                        onClick={() => this.setState({showConfirmation: true})}
+                    />
                 </div>
             </div>
         );

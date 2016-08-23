@@ -1,9 +1,15 @@
 import React from 'react';
 import './login.scss';
-import {FormControl, Checkbox, Button} from 'react-bootstrap';
+import cookie from 'react-cookie';
+import Ajax from '../../ajax/Ajax.jsx';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import Checkbox from 'material-ui/Checkbox';
 import SignUp from './sign_up/SignUp.jsx';
 
 export default class Login extends React.Component {
+
+    static contextTypes = {muiTheme: React.PropTypes.object.isRequired};
 
     static propTypes = {
         username: React.PropTypes.string,
@@ -50,15 +56,39 @@ export default class Login extends React.Component {
     }
 
     handleLogin() {
-        this.props.onLogin(this.state.username, this.state.password, this.state.rememberMe);
+        let uri = '/api/login?username=' + this.state.username
+                    + '&password=' + this.state.password;
+        Ajax.httpGet(uri, this.handleLoginCallback.bind(this));
+    }
+
+    handleLoginCallback(status, response) {
+        if (status === 200) {
+            let path = this.state.rememberMe ? '/' : '/session/';
+            let id = Number(response);
+            cookie.save("id", id, {path: path});
+            cookie.save("username", this.state.username, {path: path});
+            cookie.save("password", this.state.password, {path: path});
+            this.props.onLogin(id);
+        } else {
+            this.initializeState();
+        }
     }
 
     handleGoToSignUp() {
         this.setState({signUp: true});
     }
 
-    handleNewUser(newUser) {
-        this.props.onSignUp(newUser);
+    handleNewUserSignUp(newUserSignUp) {
+        let request = new XMLHttpRequest();
+        request.open('POST', '/api/user/', true);
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.onload = () => {
+            if (request.status === 200) {
+                let user = JSON.parse(request.responseText);
+                this.props.onSignUp(user, newUserSignUp.password);
+            }
+        };
+        request.send(JSON.stringify(newUserSignUp));
     }
 
     handleSignUpCancel() {
@@ -73,7 +103,7 @@ export default class Login extends React.Component {
         if (this.state.signUp) {
             return (
                 <SignUp
-                    onSignUp={this.handleNewUser.bind(this)}
+                    onSignUp={this.handleNewUserSignUp.bind(this)}
                     onCancel={this.handleSignUpCancel.bind(this)}
                 />
             );
@@ -82,50 +112,54 @@ export default class Login extends React.Component {
             <div className='container-layout'>
                 <div className='form-container'>
                     <form className='form'>
-                        <FormControl
-                            type='text'
-                            bsSize='large'
-                            placeholder='Username'
+                        <TextField
+                            id='loginUsername'
+                            fullWidth
+                            hintText="Username Field"
+                            floatingLabelText="Username"
+                            type="text"
                             value={this.state.username}
                             onChange={this.handleUsernameChange.bind(this)}
-                        />
-                        <FormControl
-                            type='password'
-                            bsSize='large'
-                            placeholder='Password'
+                        /><br />
+                        <TextField
+                            id='loginPassword'
+                            fullWidth
+                            hintText="Password Field"
+                            floatingLabelText="Password"
+                            type="password"
                             value={this.state.password}
                             onChange={this.handlePasswordChange.bind(this)}
-                        />
+                        /><br />
                         <Checkbox
+                            id='rememberMeCheckbox'
                             className='form-element'
-                            bsSize='large'
-                            value='off'
+                            label='Remeber me'
                             onClick={this.handleRememberMe.bind(this)}>
-                            Remember Me
                         </Checkbox>
                         <div className='login-btn'>
-                            <Button block
-                                className='form'
-                                bsStyle='primary'
-                                bsSize='large'
+                            <RaisedButton
+                                primary
+                                fullWidth
+                                id='loginButton'
+                                className='form-element'
+                                label={'Log in'}
                                 onClick={this.handleLogin.bind(this)}>
-                                Log in
-                            </Button>
+                            </RaisedButton>
                         </div>
                         <div className='help-container'>
                             <div className='new-account-btn'>
-                                <Button
-                                    className='form-element'
-                                    bsStyle='success'
-                                    bsSize='large'
+                                <RaisedButton
+                                    secondary
+                                    id='signUpButton'
+                                    label={'Sign up'}
                                     onClick={this.handleGoToSignUp.bind(this)}>
-                                    Sign up
-                                </Button>
+                                </RaisedButton>
                             </div>
                             <div className='forgot-password'>
                                 <a
                                     href='#'
                                     className='form-element'
+                                    style={{color: this.context.muiTheme.palette.primary1Color}}
                                     onClick={this.handleForgotPassword.bind(this)}>
                                     Forgot password?
                                 </a>
